@@ -17,6 +17,8 @@ public class OI {
 	// number it is.
 	Joystick stick = new Joystick(0);
 	Joystick gamepad = new Joystick(1);
+	double climbSpeed;
+	climbSpeed = gamepad.getRawAxis(2);
 	
 	// Button button = new JoystickButton(stick, buttonNumber);
 
