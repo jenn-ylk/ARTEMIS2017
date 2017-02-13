@@ -1,12 +1,15 @@
 package org.usfirst.frc.team5876.robot;
 
+import edu.wpi.first.wpilibj.AnalogGyro;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
+import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.Timer;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -26,6 +29,8 @@ public class Robot extends IterativeRobot {
 	SpeedController climbBack;
 	SpeedController climbFront;
 	SendableChooser<String> chooser = new SendableChooser<>();
+	SPI gyro;
+	Timer timer;
 
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -40,6 +45,7 @@ public class Robot extends IterativeRobot {
 		stick = new Joystick(0);
 		gamepad = new Joystick(1);
 		
+		
 		SpeedController driveLeftFront = new VictorSP(0);
 		SpeedController driveLeftBack = new VictorSP(1);
 		SpeedController driveRightFront = new VictorSP(2);
@@ -47,6 +53,9 @@ public class Robot extends IterativeRobot {
 		climbFront = new VictorSP(4);
 		climbBack = new VictorSP(5);
 		
+		timer = new Timer();
+		gyro = new SPI(1);
+		gyro.calibrate();
 		robotDrive = new RobotDrive(driveLeftFront, driveLeftBack, driveRightFront, driveRightBack);
 	}
 
@@ -63,6 +72,10 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousInit() {
+		timer.reset();
+		timer.start();
+		gyro.reset();
+		
 		autoSelected = chooser.getSelected();
 		// autoSelected = SmartDashboard.getString("Auto Selector",
 		// defaultAuto);
@@ -74,7 +87,28 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousPeriodic() {
-		switch (autoSelected) {
+		
+		System.out.println(gyro.getAngle());
+		
+		if (timer.get() < 1.5) {
+			robotDrive.arcadeDrive(0.5, 0);
+		}
+		else if (timer.get() < 2.5) {
+			if (gyro.getAngle() > -43) {
+				robotDrive.arcadeDrive(0, 0.5); // turn left
+			}
+			else if (gyro.getAngle() < -47) {
+				robotDrive.arcadeDrive(0, -0.5); // turn right
+			}
+			else {
+				robotDrive.arcadeDrive(-0.5, 0);
+			}
+		}
+		else {
+			robotDrive.arcadeDrive(0, 0);
+		}
+	
+		/*switch (autoSelected) {
 		case customAuto:
 			// Put custom auto code here
 			break;
@@ -82,7 +116,7 @@ public class Robot extends IterativeRobot {
 		default:
 			// Put default auto code here
 			break;
-		}
+		}*/
 	}
 
 	/**
@@ -92,10 +126,10 @@ public class Robot extends IterativeRobot {
 	public void teleopPeriodic() {
 		robotDrive.arcadeDrive(stick.getRawAxis(1), -(stick.getRawAxis(0)));
 		
-		climbFront.set(gamepad.getRawAxis(2));
-		climbBack.set(gamepad.getRawAxis(2));
-		climbFront.set(-gamepad.getRawAxis(3));
-		climbBack.set(-gamepad.getRawAxis(3));		
+		/*climbFront.set(gamepad.getRawAxis(2));
+		climbBack.set(gamepad.getRawAxis(2));*/ //This was letting it move backwards
+		climbFront.set(-java.lang.Math.abs(gamepad.getRawAxis(3)));
+		climbBack.set(-java.lang.Math.abs(gamepad.getRawAxis(3)));		
 	}
 
 	/**
@@ -103,6 +137,29 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void testPeriodic() {
+	}
+	
+	public void kittAuto() {
+		if (timer.get() < 1.5) {
+			if (gyro.getAngle() == 0) {
+				robotDrive.drive(-0.5, 0);
+			}
+		}
+		else if (timer.get() < 2.5) {
+			while (gyro.getAngle() > -47 && gyro.getAngle() < -43) {
+				if (gyro.getAngle() > -43) {
+					robotDrive.drive(0, 0.5); // turn left
+				}
+				else {
+					robotDrive.drive(0, -0.5); // turn right
+				}
+			robotDrive.drive(-0.5, 0);
+			}
+		}
+		else {
+			robotDrive.drive(0, 0);
+		}
+		
 	}
 }
 
