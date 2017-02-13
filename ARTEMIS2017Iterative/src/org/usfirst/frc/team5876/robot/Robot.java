@@ -37,6 +37,9 @@ public class Robot extends IterativeRobot {
 		chooser.addObject("My Auto", customAuto);
 		SmartDashboard.putData("Auto choices", chooser);
 		
+		stick = new Joystick(0);
+		gamepad = new Joystick(1);
+		
 		SpeedController driveLeftFront = new VictorSP(0);
 		SpeedController driveLeftBack = new VictorSP(1);
 		SpeedController driveRightFront = new VictorSP(2);
@@ -87,7 +90,7 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
-		robotDrive.arcadeDrive(stick.getRawAxis(1), stick.getRawAxis(0));
+		robotDrive.arcadeDrive(stick.getRawAxis(1), -(stick.getRawAxis(0)));
 		
 		climbFront.set(gamepad.getRawAxis(2));
 		climbBack.set(gamepad.getRawAxis(2));
