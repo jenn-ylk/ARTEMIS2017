@@ -1,10 +1,9 @@
 package org.usfirst.frc.team5876.robot;
 
-import edu.wpi.first.wpilibj.AnalogGyro;
+import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
-import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -29,7 +28,7 @@ public class Robot extends IterativeRobot {
 	SpeedController climbBack;
 	SpeedController climbFront;
 	SendableChooser<String> chooser = new SendableChooser<>();
-	SPI gyro;
+	ADXRS450_Gyro gyro;
 	Timer timer;
 
 	/**
@@ -54,7 +53,7 @@ public class Robot extends IterativeRobot {
 		climbBack = new VictorSP(5);
 		
 		timer = new Timer();
-		gyro = new SPI(1);
+		gyro = new ADXRS450_Gyro();
 		gyro.calibrate();
 		robotDrive = new RobotDrive(driveLeftFront, driveLeftBack, driveRightFront, driveRightBack);
 	}
@@ -90,7 +89,7 @@ public class Robot extends IterativeRobot {
 		
 		System.out.println(gyro.getAngle());
 		
-		if (timer.get() < 1.5) {
+		/*if (timer.get() < 1.5) {
 			robotDrive.arcadeDrive(0.5, 0);
 		}
 		else if (timer.get() < 2.5) {
@@ -107,7 +106,7 @@ public class Robot extends IterativeRobot {
 		else {
 			robotDrive.arcadeDrive(0, 0);
 		}
-	
+	*/
 		/*switch (autoSelected) {
 		case customAuto:
 			// Put custom auto code here
@@ -124,7 +123,8 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
-		robotDrive.arcadeDrive(stick.getRawAxis(1), -(stick.getRawAxis(0)));
+		robotDrive.arcadeDrive(stick.getRawAxis(1), -(stick.getRawAxis(0))); //using the joystick
+		/*robotDrive.arcadeDrive(-(stick.getRawAxis(1)), stick.getRawAxis(4));*/ //using the gamepad
 		
 		/*climbFront.set(gamepad.getRawAxis(2));
 		climbBack.set(gamepad.getRawAxis(2));*/ //This was letting it move backwards
