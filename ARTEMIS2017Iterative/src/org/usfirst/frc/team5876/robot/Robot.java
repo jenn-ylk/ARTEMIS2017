@@ -87,27 +87,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousPeriodic() {
 		
-		System.out.println(gyro.getAngle());
-		
-		if (timer.get() < 1.5) {
-			robotDrive.arcadeDrive(0.5, 0);
-		}
-		else if (timer.get() < 2.5) {
-			if (gyro.getAngle() > -43) {
-				robotDrive.arcadeDrive(0, 0.5); // turn left
-			}
-			else if (gyro.getAngle() < -47) {
-				robotDrive.arcadeDrive(0, -0.5); // turn right
-			}
-			else {
-				robotDrive.arcadeDrive(-0.5, 0);
-			}
-		}
-		else {
-			robotDrive.arcadeDrive(0, 0);
-		}
-	
-		/*switch (autoSelected) {
+		switch (autoSelected) {
 		case customAuto:
 			// Put custom auto code here
 			break;
@@ -115,7 +95,7 @@ public class Robot extends IterativeRobot {
 		default:
 			// Put default auto code here
 			break;
-		}*/
+		}
 	}
 
 	/**
@@ -123,9 +103,16 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
-		
-		/*robotDrive.arcadeDrive(stick.getRawAxis(1), -(stick.getRawAxis(0)));*/ //using the joystick
-		robotDrive.arcadeDrive(-(stick.getRawAxis(1)), -(stick.getRawAxis(4))); //using the gamepad
+		if (stick.getRawButton(0) == true) {
+			gyro.reset();
+			while (stick.getRawButton(0) == true) {
+				driveForward();
+			}
+		}
+		else {		
+			/*robotDrive.arcadeDrive(stick.getRawAxis(1), -(stick.getRawAxis(0)));*/ //using the joystick
+			robotDrive.arcadeDrive(-(stick.getRawAxis(1)), -(stick.getRawAxis(4))); //using the gamepad
+		}
 		
 		/*climbFront.set(gamepad.getRawAxis(2));
 		climbBack.set(gamepad.getRawAxis(2));*/ //This was letting it move backwards
@@ -141,26 +128,38 @@ public class Robot extends IterativeRobot {
 	}
 	
 	public void kittAuto() {
-		if (timer.get() < 1.5) {
-			if (gyro.getAngle() == 0) {
-				robotDrive.drive(-0.5, 0);
+		System.out.println(gyro.getAngle());
+		
+			if (timer.get() < 1.5) {
+				robotDrive.arcadeDrive(0.5, 0);
 			}
-		}
-		else if (timer.get() < 2.5) {
-			while (gyro.getAngle() > -47 && gyro.getAngle() < -43) {
+			else if (timer.get() < 2.5) {
 				if (gyro.getAngle() > -43) {
-					robotDrive.drive(0, 0.5); // turn left
+					robotDrive.arcadeDrive(0, 0.5); // turn left
+				}
+				else if (gyro.getAngle() < -47) {
+					robotDrive.arcadeDrive(0, -0.5); // turn right
 				}
 				else {
-					robotDrive.drive(0, -0.5); // turn right
+					robotDrive.arcadeDrive(-0.5, 0);
 				}
-			robotDrive.drive(-0.5, 0);
 			}
+			else {
+				robotDrive.arcadeDrive(0, 0);
+			}
+	
 		}
-		else {
-			robotDrive.drive(0, 0);
+	public void driveForward() {
+		if (gyro.getAngle() < 1 || gyro.getAngle() > -1) {
+			robotDrive.arcadeDrive(stick.getRawAxis(1), 0);
 		}
-		
+		else if (gyro.getAngle() > 1) {
+			
+		}
+		else if (gyro.getAngle() < -1) {
+			
+		}
 	}
+
 }
 
