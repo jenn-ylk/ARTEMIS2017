@@ -87,12 +87,18 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousPeriodic() {
-
+		while (isAutonomous() && isEnabled()){
+			double angle = gyro.getAngle();
+			double Kp = 0.03;
+			robotDrive.arcadeDrive(-1.0, -angle * Kp);
+			Timer.delay(0.01);
+		}
 		switch (autoSelected) {
 		case 1:
 			// Put custom auto code here
 			System.out.println(gyro.getAngle());
 			System.out.println("Auto 1");
+			
 
 			if (timer.get() < 2.5) {
 				robotDrive.arcadeDrive(-0.5, 0);
