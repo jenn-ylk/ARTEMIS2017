@@ -18,16 +18,17 @@ import edu.wpi.first.wpilibj.Timer;
  * directory.
  */
 public class Robot extends IterativeRobot {
-	final String defaultAuto = "Default";
-	final String customAuto = "My Auto";
-	String autoSelected;
-	
+	final Integer middleAuto = new Integer(0);
+	final Integer rightAuto = new Integer(1);
+	final Integer leftAuto = new Integer(2);
+	Integer autoSelected;
+
 	RobotDrive robotDrive;
 	Joystick stick;
-	Joystick gamepad;
+	//Joystick gamepad;
 	SpeedController climbBack;
 	SpeedController climbFront;
-	SendableChooser<String> chooser = new SendableChooser<>();
+	SendableChooser<Integer> chooser = new SendableChooser<Integer>();
 	ADXRS450_Gyro gyro;
 	Timer timer;
 
@@ -37,21 +38,22 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void robotInit() {
-		chooser.addDefault("Default Auto", defaultAuto);
-		chooser.addObject("My Auto", customAuto);
+		chooser.addDefault("Middle Gear", middleAuto);
+		chooser.addObject("Right Gear", rightAuto);
+		chooser.addObject("Left Gear", leftAuto);
 		SmartDashboard.putData("Auto choices", chooser);
-		
+		// chooser.addObject("Middle Gear", new Integer(0));
+		// chooser.addObject("Right", new Integer(1)); 	
 		stick = new Joystick(0);
-		gamepad = new Joystick(1);
-		
-		
+		//gamepad = new Joystick(1);
+
 		SpeedController driveLeftFront = new VictorSP(0);
 		SpeedController driveLeftBack = new VictorSP(1);
 		SpeedController driveRightFront = new VictorSP(2);
 		SpeedController driveRightBack = new VictorSP(3);
 		climbFront = new VictorSP(4);
 		climbBack = new VictorSP(5);
-		
+
 		timer = new Timer();
 		gyro = new ADXRS450_Gyro();
 		gyro.calibrate();
@@ -74,7 +76,6 @@ public class Robot extends IterativeRobot {
 		timer.reset();
 		timer.start();
 		gyro.reset();
-		
 		autoSelected = chooser.getSelected();
 		// autoSelected = SmartDashboard.getString("Auto Selector",
 		// defaultAuto);
@@ -86,14 +87,59 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousPeriodic() {
-		
+
 		switch (autoSelected) {
-		case customAuto:
+		case 1:
 			// Put custom auto code here
+			System.out.println(gyro.getAngle());
+			System.out.println("Auto 1");
+
+			if (timer.get() < 2.5) {
+				robotDrive.arcadeDrive(-0.5, 0);
+			} else if (timer.get() < 4.0) {
+				if (gyro.getAngle() > -44) {
+					System.out.println("need to turn left");
+					robotDrive.arcadeDrive(0.1, 0.5); // turn left
+				} else if (gyro.getAngle() < -46) {
+					System.out.println("need to turn right");
+					robotDrive.arcadeDrive(0.1, -0.5); // turn right
+				} else {
+					robotDrive.arcadeDrive(0.5, 0);
+				}
+			} else {
+				robotDrive.arcadeDrive(0, 0);
+			}
 			break;
-		case defaultAuto:
+		case 2:
+			// Put custom auto code here
+			System.out.println(gyro.getAngle());
+			System.out.println("Auto 2");
+
+			if (timer.get() < 2.5) {
+				robotDrive.arcadeDrive(-0.5, 0);
+			} else if (timer.get() < 4.0) {
+				if (gyro.getAngle() < 44) {
+					System.out.println("need to turn right");
+					robotDrive.arcadeDrive(0.1, 0.5); // turn right
+				} else if (gyro.getAngle() > 46) {
+					System.out.println("need to turn left");
+					robotDrive.arcadeDrive(0.1, -0.5); // turn left
+				} else {
+					robotDrive.arcadeDrive(0.5, 0);
+				}
+			} else {
+				robotDrive.arcadeDrive(0, 0);
+			}
+			break;
+		case 0:
 		default:
 			// Put default auto code here
+			System.out.println(gyro.getAngle());
+			System.out.println("Auto 0");
+
+			if (timer.get() < 2.5) {
+				robotDrive.arcadeDrive(-0.5, 0);
+			}
 			break;
 		}
 	}
@@ -103,21 +149,53 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
-		if (stick.getRawButton(0) == true) {
-			gyro.reset();
-			while (stick.getRawButton(0) == true) {
-				driveForward();
+		System.out.println(gyro.getAngle());
+		/*
+		 * if (stick.getRawButton(0) == true) { gyro.reset(); while
+		 * (stick.getRawButton(0) == true) { driveForward(); }
+		 */
+		// robotDrive.arcadeDrive((stick.getRawAxis(1)), -(stick.getRawAxis(4)),
+		// true); //using the gamepad
+		// }
+		int pov = stick.getPOV();
+		float slow = 0.5f;
+		if (pov != -1) {
+			switch (pov) {
+			case 0:
+				robotDrive.arcadeDrive(-slow, 0);
+				break;
+			case 45:
+				robotDrive.arcadeDrive(-slow, -slow);
+				break;
+			case 90:
+				robotDrive.arcadeDrive(0, -slow);
+				break;
+			case 135:
+				robotDrive.arcadeDrive(slow, 0);
+				break;
+			case 180:
+				robotDrive.arcadeDrive(slow, 0);
+				break;
+			case 225:
+				robotDrive.arcadeDrive(slow, slow);
+				break;
+			case 270:
+				robotDrive.arcadeDrive(0, slow);
+				break;
+			case 315:
+				robotDrive.arcadeDrive(slow, slow);
+				break;
 			}
+		} else {
+			robotDrive.arcadeDrive((stick.getRawAxis(1)), -(stick.getRawAxis(4)), true);
 		}
-		else {		
-			/*robotDrive.arcadeDrive(stick.getRawAxis(1), -(stick.getRawAxis(0)));*/ //using the joystick
-			robotDrive.arcadeDrive(-(stick.getRawAxis(1)), -(stick.getRawAxis(4))); //using the gamepad
-		}
-		
-		/*climbFront.set(gamepad.getRawAxis(2));
-		climbBack.set(gamepad.getRawAxis(2));*/ //This was letting it move backwards
-		climbFront.set(-java.lang.Math.abs(gamepad.getRawAxis(3)));
-		climbBack.set(-java.lang.Math.abs(gamepad.getRawAxis(3)));		
+
+		/*
+		 * climbFront.set(gamepad.getRawAxis(2));
+		 * climbBack.set(gamepad.getRawAxis(2));
+		 */ // This was letting it move backwards
+		climbFront.set(-java.lang.Math.abs(stick.getRawAxis(3)));
+		climbBack.set(-java.lang.Math.abs(stick.getRawAxis(3)));
 	}
 
 	/**
@@ -126,40 +204,27 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void testPeriodic() {
 	}
-	
-	public void kittAuto() {
-		System.out.println(gyro.getAngle());
-		
-			if (timer.get() < 1.5) {
-				robotDrive.arcadeDrive(0.5, 0);
-			}
-			else if (timer.get() < 2.5) {
-				if (gyro.getAngle() > -43) {
-					robotDrive.arcadeDrive(0, 0.5); // turn left
-				}
-				else if (gyro.getAngle() < -47) {
-					robotDrive.arcadeDrive(0, -0.5); // turn right
-				}
-				else {
-					robotDrive.arcadeDrive(-0.5, 0);
-				}
-			}
-			else {
-				robotDrive.arcadeDrive(0, 0);
-			}
-	
-		}
+
+	/*
+	 * public void kittAuto() { System.out.println(gyro.getAngle());
+	 * 
+	 * if (timer.get() < 1.5) { robotDrive.arcadeDrive(0.5, 0); } else if
+	 * (timer.get() < 2.5) { if (gyro.getAngle() > -43) {
+	 * robotDrive.arcadeDrive(0, 0.5); // turn left } else if (gyro.getAngle() <
+	 * -47) { robotDrive.arcadeDrive(0, -0.5); // turn right } else {
+	 * robotDrive.arcadeDrive(-0.5, 0); } } else { robotDrive.arcadeDrive(0, 0);
+	 * }
+	 * 
+	 * }
+	 */
 	public void driveForward() {
-		if (gyro.getAngle() < 1 || gyro.getAngle() > -1) {
-			robotDrive.arcadeDrive(stick.getRawAxis(1), 0);
-		}
-		else if (gyro.getAngle() > 1) {
-			
-		}
-		else if (gyro.getAngle() < -1) {
-			
-		}
-	}
+		/*
+		 * if (gyro.getAngle() < 1 || gyro.getAngle() > -1) {
+		 * robotDrive.arcadeDrive(stick.getRawAxis(1), 0); } else if
+		 * (gyro.getAngle() > 1) { // is tilting left
+		 * robotDrive.arcadeDrive(stick.getRawAxis(1), ); } else if
+		 * (gyro.getAngle() < -1) { // is tilting right } else {
+		 * robotDrive.arcadeDrive(stick.getRawAxis(1), ) }
+		 */}
 
 }
-
