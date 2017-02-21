@@ -42,6 +42,7 @@ public class Robot extends IterativeRobot {
 		chooser.addObject("Right Gear", rightAuto);
 		chooser.addObject("Left Gear", leftAuto);
 		SmartDashboard.putData("Auto choices", chooser);
+		//SmartDashboard.putData("Gyro", gyro.getAngle());
 		// chooser.addObject("Middle Gear", new Integer(0));
 		// chooser.addObject("Right", new Integer(1)); 	
 		stick = new Joystick(0);
@@ -87,12 +88,12 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousPeriodic() {
-		while (isAutonomous() && isEnabled()){
+		/*while (isAutonomous() && isEnabled()){
 			double angle = gyro.getAngle();
 			double Kp = 0.03;
 			robotDrive.arcadeDrive(-1.0, -angle * Kp);
 			Timer.delay(0.01);
-		}
+		}*/
 		switch (autoSelected) {
 		case 1:
 			// Put custom auto code here
@@ -140,11 +141,23 @@ public class Robot extends IterativeRobot {
 		case 0:
 		default:
 			// Put default auto code here
+			
 			System.out.println(gyro.getAngle());
 			System.out.println("Auto 0");
+			if (timer.get() < 1.0){
+				double angle = gyro.getAngle();
+				double Kp = 0.05;
+				robotDrive.arcadeDrive(-0.35, angle * Kp);
+				Timer.delay(0.01);
+			}
 
-			if (timer.get() < 2.5) {
-				robotDrive.arcadeDrive(-0.5, 0);
+			else if (timer.get() < 4.25) {
+				
+					double angle = gyro.getAngle();
+					double Kp = 0.05;
+					robotDrive.arcadeDrive(-0.5, angle * Kp);
+					Timer.delay(0.01);
+				
 			}
 			break;
 		}
