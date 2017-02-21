@@ -95,13 +95,34 @@ public class Robot extends IterativeRobot {
 			Timer.delay(0.01);
 		}*/
 		switch (autoSelected) {
-		case 1:
+		case 1: //SHOULD TURN LEFT FOR THE GEAR HOOK ON THE RIGHT
 			// Put custom auto code here
 			System.out.println(gyro.getAngle());
 			System.out.println("Auto 1");
 			
+			if (timer.get() < 2.5){
+				double angle = gyro.getAngle();
+				double Kp = 0.05;
+				robotDrive.arcadeDrive(-0.35, angle * Kp);
+				Timer.delay(0.01);
+			}
 
-			if (timer.get() < 2.5) {
+			else if (timer.get() < 5) {
+				
+				if (gyro.getAngle() < 89) {
+					robotDrive.arcadeDrive(0, 0.3);
+				}
+				else if (gyro.getAngle() > 91) {
+					robotDrive.arcadeDrive(0, 0.3);
+				}
+				else {
+					robotDrive.arcadeDrive(0, 0);
+				}
+			}
+			else {
+				robotDrive.arcadeDrive(0, 0);
+			}
+			/*if (timer.get() < 2.5) {
 				robotDrive.arcadeDrive(-0.5, 0);
 			} else if (timer.get() < 4.0) {
 				if (gyro.getAngle() > -44) {
@@ -115,9 +136,9 @@ public class Robot extends IterativeRobot {
 				}
 			} else {
 				robotDrive.arcadeDrive(0, 0);
-			}
+			}*/
 			break;
-		case 2:
+		case 2: // Should go for the left gear - turn right
 			// Put custom auto code here
 			System.out.println(gyro.getAngle());
 			System.out.println("Auto 2");
@@ -138,25 +159,29 @@ public class Robot extends IterativeRobot {
 				robotDrive.arcadeDrive(0, 0);
 			}
 			break;
-		case 0:
+		case 0: //GOES STRAIGHT FORWARD. WORKS!!!
 		default:
 			// Put default auto code here
 			
 			System.out.println(gyro.getAngle());
 			System.out.println("Auto 0");
-			if (timer.get() < 1.0){
+			
+			
+			
+			if (timer.get() < 2.5){
 				double angle = gyro.getAngle();
 				double Kp = 0.05;
 				robotDrive.arcadeDrive(-0.35, angle * Kp);
 				Timer.delay(0.01);
 			}
 
-			else if (timer.get() < 4.25) {
+			else if (timer.get() < 4.5) {
 				
-					double angle = gyro.getAngle();
-					double Kp = 0.05;
-					robotDrive.arcadeDrive(-0.5, angle * Kp);
-					Timer.delay(0.01);
+				double angle = gyro.getAngle();
+				double Kp = 0.05;
+				robotDrive.arcadeDrive(-0.5, angle * Kp);
+				//robotDrive.arcadeDrive(-0.35, () * Kp);
+				Timer.delay(0.01);
 				
 			}
 			break;
