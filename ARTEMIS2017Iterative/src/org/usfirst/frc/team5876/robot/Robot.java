@@ -25,12 +25,15 @@ public class Robot extends IterativeRobot {
 
 	RobotDrive robotDrive;
 	Joystick stick;
+	Joystick turn;
+	
 	//Joystick gamepad;
 	SpeedController climbBack;
 	SpeedController climbFront;
 	SendableChooser<Integer> chooser = new SendableChooser<Integer>();
 	ADXRS450_Gyro gyro;
 	Timer timer;
+	
 
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -46,6 +49,7 @@ public class Robot extends IterativeRobot {
 		// chooser.addObject("Middle Gear", new Integer(0));
 		// chooser.addObject("Right", new Integer(1)); 	
 		stick = new Joystick(0);
+		turn = new Joystick(1);
 		//gamepad = new Joystick(1);
 
 		SpeedController driveLeftFront = new VictorSP(0);
@@ -103,21 +107,33 @@ public class Robot extends IterativeRobot {
 			if (timer.get() < 2.5){
 				double angle = gyro.getAngle();
 				double Kp = 0.05;
-				robotDrive.arcadeDrive(-0.35, angle * Kp);
+				robotDrive.arcadeDrive(0.35, angle * Kp);//change back to negative
 				Timer.delay(0.01);
 			}
-
-			else if (timer.get() < 5) {
+			else if (timer.get() < 6.7) {
 				
-				if (gyro.getAngle() < 89) {
-					robotDrive.arcadeDrive(0, 0.3);
+				double angle = gyro.getAngle();
+				double Kp = 0.05;
+				robotDrive.arcadeDrive(0.5, angle * Kp);//change back to negative
+				//robotDrive.arcadeDrive(-0.35, () * Kp);
+				Timer.delay(0.01);
+				
+			}
+
+			else if (timer.get() < 10) {
+				
+				if (gyro.getAngle() < -64) {
+					robotDrive.arcadeDrive(0, -0.5);
 				}
-				else if (gyro.getAngle() > 91) {
-					robotDrive.arcadeDrive(0, 0.3);
+				else if (gyro.getAngle() > -66) {
+					robotDrive.arcadeDrive(0, 0.5);
 				}
 				else {
 					robotDrive.arcadeDrive(0, 0);
 				}
+			}
+			else if (timer.get() < 12) {
+				robotDrive.arcadeDrive(0.5, 0.0); //change to negative 
 			}
 			else {
 				robotDrive.arcadeDrive(0, 0);
@@ -143,19 +159,38 @@ public class Robot extends IterativeRobot {
 			System.out.println(gyro.getAngle());
 			System.out.println("Auto 2");
 
-			if (timer.get() < 2.5) {
-				robotDrive.arcadeDrive(-0.5, 0);
-			} else if (timer.get() < 4.0) {
-				if (gyro.getAngle() < 44) {
-					System.out.println("need to turn right");
-					robotDrive.arcadeDrive(0.1, 0.5); // turn right
-				} else if (gyro.getAngle() > 46) {
-					System.out.println("need to turn left");
-					robotDrive.arcadeDrive(0.1, -0.5); // turn left
-				} else {
-					robotDrive.arcadeDrive(0.5, 0);
+			if (timer.get() < 2.5){
+				double angle = gyro.getAngle();
+				double Kp = 0.05;
+				robotDrive.arcadeDrive(0.35, angle * Kp);//change back to negative
+				Timer.delay(0.01);
+			}
+			else if (timer.get() < 6.7) {
+				
+				double angle = gyro.getAngle();
+				double Kp = 0.05;
+				robotDrive.arcadeDrive(0.5, angle * Kp);//change back to negative
+				//robotDrive.arcadeDrive(-0.35, () * Kp);
+				Timer.delay(0.01);
+				
+			}
+
+			else if (timer.get() < 10) {
+				
+				if (gyro.getAngle() < 64) {
+					robotDrive.arcadeDrive(0, -0.5);
 				}
-			} else {
+				else if (gyro.getAngle() > 66) {
+					robotDrive.arcadeDrive(0, 0.5);
+				}
+				else {
+					robotDrive.arcadeDrive(0, 0);
+				}
+			}
+			else if (timer.get() < 12) {
+				robotDrive.arcadeDrive(0.5, 0.0); //change to negative 
+			}
+			else {
 				robotDrive.arcadeDrive(0, 0);
 			}
 			break;
@@ -194,13 +229,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		System.out.println(gyro.getAngle());
-		/*
-		 * if (stick.getRawButton(0) == true) { gyro.reset(); while
-		 * (stick.getRawButton(0) == true) { driveForward(); }
-		 */
-		// robotDrive.arcadeDrive((stick.getRawAxis(1)), -(stick.getRawAxis(4)),
-		// true); //using the gamepad
-		// }
+		
 		int pov = stick.getPOV();
 		float slow = 0.5f;
 		if (pov != -1) {
@@ -231,15 +260,16 @@ public class Robot extends IterativeRobot {
 				break;
 			}
 		} else {
-			robotDrive.arcadeDrive((stick.getRawAxis(1)), -(stick.getRawAxis(4)), true);
+			/*robotDrive.arcadeDrive((stick.getRawAxis(1)), -(stick.getRawAxis(4)), true);*///USES GAMEPAD
+			robotDrive.arcadeDrive((stick.getRawAxis(1)), -(turn.getRawAxis(0)), true);
 		}
 
-		/*
-		 * climbFront.set(gamepad.getRawAxis(2));
-		 * climbBack.set(gamepad.getRawAxis(2));
-		 */ // This was letting it move backwards
-		climbFront.set(-java.lang.Math.abs(stick.getRawAxis(3)));
-		climbBack.set(-java.lang.Math.abs(stick.getRawAxis(3)));
+		/*climbFront.set(-java.lang.Math.abs(turn.getRawAxis(3)));
+		climbBack.set(-java.lang.Math.abs(turn.getRawAxis(3)));*///for gamepad
+		if (turn.getRawButton(0)) { //using double stick setup
+			climbFront.set(-java.lang.Math.abs(turn.getRawAxis(3)));
+			climbBack.set(-java.lang.Math.abs(turn.getRawAxis(3)));
+		}
 	}
 
 	/**
