@@ -104,13 +104,13 @@ public class Robot extends IterativeRobot {
 			System.out.println(gyro.getAngle());
 			System.out.println("Auto 1");
 			
-			if (timer.get() < 2.5){
+			if (timer.get() < 2){
 				double angle = gyro.getAngle();
 				double Kp = 0.05;
 				robotDrive.arcadeDrive(0.35, angle * Kp);//change back to negative
 				Timer.delay(0.01);
 			}
-			else if (timer.get() < 6.7) {
+			else if (timer.get() < 5.7) {
 				
 				double angle = gyro.getAngle();
 				double Kp = 0.05;
@@ -120,20 +120,23 @@ public class Robot extends IterativeRobot {
 				
 			}
 
-			else if (timer.get() < 10) {
+			else if (timer.get() < 7.5) {
 				
-				if (gyro.getAngle() < -64) {
+				if (gyro.getAngle() < -59.8) {
 					robotDrive.arcadeDrive(0, -0.5);
 				}
-				else if (gyro.getAngle() > -66) {
+				else if (gyro.getAngle() > -60.2) {
 					robotDrive.arcadeDrive(0, 0.5);
 				}
 				else {
 					robotDrive.arcadeDrive(0, 0);
 				}
 			}
-			else if (timer.get() < 12) {
-				robotDrive.arcadeDrive(0.5, 0.0); //change to negative 
+			else if (timer.get() < 10.5) {
+				double angle = gyro.getAngle();
+				double Kp = 0.05;
+				robotDrive.arcadeDrive(0.5, (angle +60) * Kp);//change back to negative
+				Timer.delay(0.01);
 			}
 			else {
 				robotDrive.arcadeDrive(0, 0);
@@ -159,13 +162,13 @@ public class Robot extends IterativeRobot {
 			System.out.println(gyro.getAngle());
 			System.out.println("Auto 2");
 
-			if (timer.get() < 2.5){
+			if (timer.get() < 2){
 				double angle = gyro.getAngle();
 				double Kp = 0.05;
 				robotDrive.arcadeDrive(0.35, angle * Kp);//change back to negative
 				Timer.delay(0.01);
 			}
-			else if (timer.get() < 6.7) {
+			else if (timer.get() < 5.7) {
 				
 				double angle = gyro.getAngle();
 				double Kp = 0.05;
@@ -175,7 +178,7 @@ public class Robot extends IterativeRobot {
 				
 			}
 
-			else if (timer.get() < 10) {
+			else if (timer.get() < 9.5) {
 				
 				if (gyro.getAngle() < 64) {
 					robotDrive.arcadeDrive(0, -0.5);
@@ -187,8 +190,10 @@ public class Robot extends IterativeRobot {
 					robotDrive.arcadeDrive(0, 0);
 				}
 			}
-			else if (timer.get() < 12) {
-				robotDrive.arcadeDrive(0.5, 0.0); //change to negative 
+			else if (timer.get() < 10.5) {
+				double Kp = 0.05;
+				robotDrive.arcadeDrive(0.5, 65 * Kp);//change back to negative
+				Timer.delay(0.01);
 			}
 			else {
 				robotDrive.arcadeDrive(0, 0);
