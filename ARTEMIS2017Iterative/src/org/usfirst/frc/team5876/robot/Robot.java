@@ -99,7 +99,7 @@ public class Robot extends IterativeRobot {
 			Timer.delay(0.01);
 		}*/
 		switch (autoSelected) {
-		case 1: //SHOULD TURN LEFT FOR THE GEAR HOOK ON THE RIGHT
+		case 1: //turn left for RIGHT GEAR mostly works
 			// Put custom auto code here
 			System.out.println(gyro.getAngle());
 			System.out.println("Auto 1");
@@ -141,24 +141,10 @@ public class Robot extends IterativeRobot {
 			else {
 				robotDrive.arcadeDrive(0, 0);
 			}
-			/*if (timer.get() < 2.5) {
-				robotDrive.arcadeDrive(-0.5, 0);
-			} else if (timer.get() < 4.0) {
-				if (gyro.getAngle() > -44) {
-					System.out.println("need to turn left");
-					robotDrive.arcadeDrive(0.1, 0.5); // turn left
-				} else if (gyro.getAngle() < -46) {
-					System.out.println("need to turn right");
-					robotDrive.arcadeDrive(0.1, -0.5); // turn right
-				} else {
-					robotDrive.arcadeDrive(0.5, 0);
-				}
-			} else {
-				robotDrive.arcadeDrive(0, 0);
-			}*/
+		
 			break;
-		case 2: // Should go for the left gear - turn right
-			// Put custom auto code here
+		case 2: // turn right for LEFT GEAR mostly works
+			
 			System.out.println(gyro.getAngle());
 			System.out.println("Auto 2");
 
@@ -173,17 +159,17 @@ public class Robot extends IterativeRobot {
 				double angle = gyro.getAngle();
 				double Kp = 0.05;
 				robotDrive.arcadeDrive(0.5, angle * Kp);//change back to negative
-				//robotDrive.arcadeDrive(-0.35, () * Kp);
+				
 				Timer.delay(0.01);
 				
 			}
 
-			else if (timer.get() < 9.5) {
+			else if (timer.get() < 7.5) {
 				
-				if (gyro.getAngle() < 64) {
+				if (gyro.getAngle() < 59.8) {
 					robotDrive.arcadeDrive(0, -0.5);
 				}
-				else if (gyro.getAngle() > 66) {
+				else if (gyro.getAngle() > 60.2) {
 					robotDrive.arcadeDrive(0, 0.5);
 				}
 				else {
@@ -192,7 +178,8 @@ public class Robot extends IterativeRobot {
 			}
 			else if (timer.get() < 10.5) {
 				double Kp = 0.05;
-				robotDrive.arcadeDrive(0.5, 65 * Kp);//change back to negative
+				double angle = gyro.getAngle();
+				robotDrive.arcadeDrive(0.5, angle +60 * Kp);//change back to negative
 				Timer.delay(0.01);
 			}
 			else {
@@ -201,7 +188,7 @@ public class Robot extends IterativeRobot {
 			break;
 		case 0: //GOES STRAIGHT FORWARD. WORKS!!!
 		default:
-			// Put default auto code here
+			
 			
 			System.out.println(gyro.getAngle());
 			System.out.println("Auto 0");
@@ -220,7 +207,7 @@ public class Robot extends IterativeRobot {
 				double angle = gyro.getAngle();
 				double Kp = 0.05;
 				robotDrive.arcadeDrive(-0.5, angle * Kp);
-				//robotDrive.arcadeDrive(-0.35, () * Kp);
+				
 				Timer.delay(0.01);
 				
 			}
