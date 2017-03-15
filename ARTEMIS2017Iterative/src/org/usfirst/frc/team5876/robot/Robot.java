@@ -108,23 +108,23 @@ public class Robot extends IterativeRobot {
 			System.out.println(gyro.getAngle());
 			System.out.println("Auto 1");
 			
-			if (timer.get() < 2){
+			if (timer.get() < 1.5){ //.5 seconds less of slow advance
 				double angle = gyro.getAngle();
 				double Kp = 0.05;
-				robotDrive.arcadeDrive(0.35, angle * Kp);//change back to negative
+				robotDrive.arcadeDrive(-0.35, angle * Kp);//change back to negative
 				Timer.delay(0.01);
 			}
-			else if (timer.get() < 5.7) {
+			else if (timer.get() < 4.7) {
 				
 				double angle = gyro.getAngle();
 				double Kp = 0.05;
-				robotDrive.arcadeDrive(0.5, angle * Kp);//change back to negative
+				robotDrive.arcadeDrive(-0.5, angle * Kp);//change back to negative
 				//robotDrive.arcadeDrive(-0.35, () * Kp);
 				Timer.delay(0.01);
 				
 			}
 
-			else if (timer.get() < 7.5) {
+			else if (timer.get() < 6.5) {
 				
 				if (gyro.getAngle() < -59.8) {
 					robotDrive.arcadeDrive(0, -0.5);
@@ -136,10 +136,10 @@ public class Robot extends IterativeRobot {
 					robotDrive.arcadeDrive(0, 0);
 				}
 			}
-			else if (timer.get() < 10.5) {
+			else if (timer.get() < 9.5) {
 				double angle = gyro.getAngle();
 				double Kp = 0.05;
-				robotDrive.arcadeDrive(0.5, (angle +60) * Kp);//change back to negative
+				robotDrive.arcadeDrive(-0.5, (angle +60) * Kp);//change back to negative
 				Timer.delay(0.01);
 			}
 			else {
@@ -166,25 +166,35 @@ public class Robot extends IterativeRobot {
 			System.out.println(gyro.getAngle());
 			System.out.println("Auto 2");
 
-			if (timer.get() < 2){
+			if (timer.get() < 1.5){
 				double angle = gyro.getAngle();
 				double Kp = 0.05;
-				robotDrive.arcadeDrive(0.35, angle * Kp);//change back to negative
+				robotDrive.arcadeDrive(-0.35, angle * Kp);//change back to negative
 				Timer.delay(0.01);
 			}
-			else if (timer.get() < 5.7) {
+			else if (timer.get() < 4.7) {
 				
 				double angle = gyro.getAngle();
 				double Kp = 0.05;
-				robotDrive.arcadeDrive(0.5, angle * Kp);//change back to negative
+				robotDrive.arcadeDrive(-0.5, angle * Kp);//change back to negative
 				//robotDrive.arcadeDrive(-0.35, () * Kp);
 				Timer.delay(0.01);
 				
 			}
 
-			else if (timer.get() < 9.5) {
+			else if (timer.get() < 6.5) {
 				
-				if (gyro.getAngle() < 64) {
+				if (gyro.getAngle() < 60.2) {
+					robotDrive.arcadeDrive(0, -0.5);
+				}
+				else if (gyro.getAngle() > 59.8) {
+					robotDrive.arcadeDrive(0, 0.5);
+				}
+				else {
+					robotDrive.arcadeDrive(0, 0);
+				}
+				
+				/*if (gyro.getAngle() < 64) {
 					robotDrive.arcadeDrive(0, -0.5);
 				}
 				else if (gyro.getAngle() > 66) {
@@ -192,13 +202,21 @@ public class Robot extends IterativeRobot {
 				}
 				else {
 					robotDrive.arcadeDrive(0, 0);
-				}
+				}*/
 			}
-			else if (timer.get() < 10.5) {
+			
+			else if (timer.get() < 9.5) {
+				double angle = gyro.getAngle();
 				double Kp = 0.05;
-				robotDrive.arcadeDrive(0.5, 65 * Kp);//change back to negative
+				robotDrive.arcadeDrive(-0.5, (angle -60) * Kp);//change back to negative
 				Timer.delay(0.01);
 			}
+			
+			/*else if (timer.get() < 10.0) {
+				double Kp = 0.05;
+				robotDrive.arcadeDrive(-0.5, 65 * Kp);//change back to negative
+				Timer.delay(0.01);
+			}*/
 			else {
 				robotDrive.arcadeDrive(0, 0);
 			}
@@ -212,14 +230,14 @@ public class Robot extends IterativeRobot {
 			
 			
 			
-			if (timer.get() < 2.5){
+			if (timer.get() < 1.5){
 				double angle = gyro.getAngle();
 				double Kp = 0.05;
 				robotDrive.arcadeDrive(-0.35, angle * Kp);
 				Timer.delay(0.01);
 			}
 
-			else if (timer.get() < 4.5) {
+			else if (timer.get() < 5.2) {
 				
 				double angle = gyro.getAngle();
 				double Kp = 0.05;
@@ -275,9 +293,13 @@ public class Robot extends IterativeRobot {
 
 		/*climbFront.set(-java.lang.Math.abs(turn.getRawAxis(3)));
 		climbBack.set(-java.lang.Math.abs(turn.getRawAxis(3)));*///for gamepad
-		if (turn.getRawButton(0)) { //using double stick setup
-			climbFront.set(-java.lang.Math.abs(turn.getRawAxis(3)));
-			climbBack.set(-java.lang.Math.abs(turn.getRawAxis(3)));
+		if (turn.getRawButton(1) == true) { //using double stick setup
+			climbFront.set(-java.lang.Math.abs(turn.getRawAxis(3)+1)/2);
+			climbBack.set(-java.lang.Math.abs(turn.getRawAxis(3)+1)/2);
+		}
+		else {
+			climbFront.set(0);
+			climbBack.set(0);
 		}
 	}
 
