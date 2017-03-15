@@ -1,6 +1,7 @@
 package org.usfirst.frc.team5876.robot;
 
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
@@ -33,6 +34,7 @@ public class Robot extends IterativeRobot {
 	SendableChooser<Integer> chooser = new SendableChooser<Integer>();
 	ADXRS450_Gyro gyro;
 	Timer timer;
+	CameraServer server;
 	
 
 	/**
@@ -45,7 +47,7 @@ public class Robot extends IterativeRobot {
 		chooser.addObject("Right Gear", rightAuto);
 		chooser.addObject("Left Gear", leftAuto);
 		SmartDashboard.putData("Auto choices", chooser);
-		//SmartDashboard.putData("Gyro", gyro.getAngle());
+		//SmartDashboard.putNumber("Gyro", gyro.getAngle());
 		// chooser.addObject("Middle Gear", new Integer(0));
 		// chooser.addObject("Right", new Integer(1)); 	
 		stick = new Joystick(0);
@@ -63,6 +65,8 @@ public class Robot extends IterativeRobot {
 		gyro = new ADXRS450_Gyro();
 		gyro.calibrate();
 		robotDrive = new RobotDrive(driveLeftFront, driveLeftBack, driveRightFront, driveRightBack);
+		
+		CameraServer.getInstance().startAutomaticCapture();
 	}
 
 	/**
