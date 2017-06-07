@@ -31,6 +31,7 @@ public class Robot extends IterativeRobot {
 	//Joystick gamepad;
 	SpeedController climbBack;
 	SpeedController climbFront;
+	SpeedController shoot;
 	SendableChooser<Integer> chooser = new SendableChooser<Integer>();
 	ADXRS450_Gyro gyro;
 	Timer timer;
@@ -60,6 +61,7 @@ public class Robot extends IterativeRobot {
 		SpeedController driveRightBack = new VictorSP(3);
 		climbFront = new VictorSP(4);
 		climbBack = new VictorSP(5);
+		shoot = new VictorSP(6);
 
 		timer = new Timer();
 		gyro = new ADXRS450_Gyro();
@@ -286,6 +288,8 @@ public class Robot extends IterativeRobot {
 				robotDrive.arcadeDrive(slow, slow);
 				break;
 			}
+			
+			
 		} else {
 			/*robotDrive.arcadeDrive((stick.getRawAxis(1)), -(stick.getRawAxis(4)), true);*///USES GAMEPAD
 			robotDrive.arcadeDrive((stick.getRawAxis(1)), -(turn.getRawAxis(0)), true);
