@@ -29,6 +29,9 @@ public class Robot extends IterativeRobot {
 	SpeedController climbBack;
 	SpeedController climbFront;
 	SpeedController shoot;
+	SpeedController gear;
+	SpeedController intake;
+	SpeedController agitator;
 	SendableChooser<Integer> chooser = new SendableChooser<Integer>();
 	ADXRS450_Gyro gyro;
 	Timer timer;
@@ -55,6 +58,9 @@ public class Robot extends IterativeRobot {
 		 climbFront = new VictorSP(4);
 		 climbBack = new VictorSP(5);
 		 shoot = new VictorSP(7);
+		 gear = new VictorSP(8);
+		 intake = new VictorSP(9);
+		 agitator = new VictorSP(10);
 
 		 timer = new Timer();
 		 gyro = new ADXRS450_Gyro();
@@ -205,18 +211,15 @@ public class Robot extends IterativeRobot {
 			 robotDrive.arcadeDrive((stick.getRawAxis(1)), -(gamepad.getRawAxis(0)), true);
 		 }
 
-		 if(button==true){
+		 if(button==true){ //SHOOT
 			 shoot.set((gamepad.getRawAxis(3)+1)/2);
 		 }
 		 else if(button==false){
 			 shoot.set(0);
 		 }
 
-		 /*
-		  * climbFront.set(gamepad.getRawAxis(2));
-		  * climbBack.set(gamepad.getRawAxis(2));
-		  */ // This was letting it move backwards
-		 if (stick.getRawButton(1) == true){
+		
+		 if (stick.getRawButton(1) == true){ //CLIMB
 			 climbFront.set((stick.getRawAxis(3)+1)/2);
 
 			 climbBack.set((stick.getRawAxis(3)+1)/2);
@@ -225,35 +228,25 @@ public class Robot extends IterativeRobot {
 			 climbFront.set(0);
 			 climbBack.set(0);
 		 }
+		 if (gamepad.getRawButton(2)==true){ //GEAR
+			 gear.set(0.4);
+		 }
+		 else {
+			 gear.set(-0.4);
+		 }
+		 if(gamepad.getRawButton(3)==true){ //FUEL INTAKE
+			 intake.set(1);
+			 agitator.set(1);
+		 }
+		 else {
+			 intake.set(0);
+			 agitator.set(0);
+		 }
+		  
 	 }
 
-	 /**
-	  * This function is called periodically during test mode
-	  */
 	 @Override
 	 public void testPeriodic() {
 	 }
-
-	 /*
-	  * public void kittAuto() { System.out.println(gyro.getAngle());
-	  *
-	  * if (timer.get() < 1.5) { robotDrive.arcadeDrive(0.5, 0); } else if
-	  * (timer.get() < 2.5) { if (gyro.getAngle() > -43) {
-	  * robotDrive.arcadeDrive(0, 0.5); // turn left } else if (gyro.getAngle() <
-	  * -47) { robotDrive.arcadeDrive(0, -0.5); // turn right } else {
-	  * robotDrive.arcadeDrive(-0.5, 0); } } else { robotDrive.arcadeDrive(0, 0);
-	  * }
-	  *
-	  * }
-	  */
-	 public void driveForward() {
-		 /*
-		  * if (gyro.getAngle() < 1 || gyro.getAngle() > -1) {
-		  * robotDrive.arcadeDrive(stick.getRawAxis(1), 0); } else if
-		  * (gyro.getAngle() > 1) { // is tilting left
-		  * robotDrive.arcadeDrive(stick.getRawAxis(1), ); } else if
-		  * (gyro.getAngle() < -1) { // is tilting right } else {
-		  * robotDrive.arcadeDrive(stick.getRawAxis(1), ) }
-		  */}
 
 }
