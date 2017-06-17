@@ -195,11 +195,19 @@ public class Robot extends IterativeRobot {
 			 climbFront.set(0);
 			 climbBack.set(0);
 		 }
+		 timer.reset();
 		 if (gamepad.getRawButton(2)==true){ //GEAR
-			 gear.set(0.4);
+			 if(timer.get() < 5){
+				gear.set(0.4); 
+				timer.reset();
+			 }
 		 }
 		 else {
-			 gear.set(-0.4);
+			 if(timer.get() < 5){
+				gear.set(-0.4); 
+				timer.reset();
+			 }
+
 		 }
 		 if(gamepad.getRawButton(3)==true){ //FUEL INTAKE
 			 intake.set(1);
