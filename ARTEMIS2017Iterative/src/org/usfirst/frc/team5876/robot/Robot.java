@@ -139,40 +139,41 @@ public class Robot extends IterativeRobot {
 		 System.out.println(gyro.getAngle());
 	
 		 int pov = stick.getPOV();
+		 int povTurn = gamepad.getPOV();
 		 boolean button = gamepad.getRawButton(1);
 		 float slow = 0.5f;
+		 float turn = 0, forward = 0;
 		 if (gamepad.getRawButton(2)) {
 			 
 		 }
-		 if (pov != -1) {
+		 if (pov != -1 || povTurn != -1) {
 			 switch (pov) {
 			 case 0:
-				 robotDrive.arcadeDrive(-slow, 0);
-				 break;
+			 case 315:
 			 case 45:
-				 robotDrive.arcadeDrive(-slow, -slow);
-				 break;
-			 case 90:
-				 robotDrive.arcadeDrive(0, -slow);
-				 break;
-			 case 135:
-				 robotDrive.arcadeDrive(slow, 0);
+				 forward = -slow;
 				 break;
 			 case 180:
-				 robotDrive.arcadeDrive(slow, 0);
-				 break;
+			 case 135:
 			 case 225:
-				 robotDrive.arcadeDrive(slow, slow);
+				 forward = slow;
+				 break;
+			 } 
+			 switch (povTurn) {
+			 case 90:
+			 case 45:
+			 case 135:	 
+				 turn = -slow;
 				 break;
 			 case 270:
-				 robotDrive.arcadeDrive(0, slow);
-				 break;
+			 case 225:
 			 case 315:
-				 robotDrive.arcadeDrive(slow, slow);
+				 turn = slow;
 				 break;
-			 }                                           
+			 }
+			 robotDrive.arcadeDrive(forward, turn);
 		 }
-
+		 
 
 		 else {
 			 robotDrive.arcadeDrive((stick.getRawAxis(1)), -(gamepad.getRawAxis(0)), true);
