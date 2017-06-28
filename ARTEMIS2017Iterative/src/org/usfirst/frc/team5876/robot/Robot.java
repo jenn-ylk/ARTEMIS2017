@@ -1,6 +1,8 @@
 package org.usfirst.frc.team5876.robot;
 
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
+import edu.wpi.first.wpilibj.DigitalOutput;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
@@ -29,15 +31,16 @@ public class Robot extends IterativeRobot {
 	SendableChooser<Integer> chooser = new SendableChooser<Integer>();
 	ADXRS450_Gyro gyro;
 	Timer timer;
+	DigitalOutput RedBlue;
+	Boolean color = true;
 
 	
 	 @Override
-	 public void robotInit() {
+	 public void robotInit() {		 
 		 chooser.addDefault("Middle Gear", middleAuto);
 		 chooser.addObject("Right Gear", rightAuto);
 		 chooser.addObject("Left Gear", leftAuto);
 		 SmartDashboard.putData("Auto choices", chooser);
-		 
 		 
 		 stick = new Joystick(0);
 		 gamepad = new Joystick(1);
@@ -52,6 +55,7 @@ public class Robot extends IterativeRobot {
 		 intake = new VictorSP(9);
 		 agitator = new VictorSP(10);
 
+		 RedBlue = new DigitalOutput(0);
 		 timer = new Timer();
 		 gyro = new ADXRS450_Gyro();
 		 gyro.calibrate();
@@ -70,6 +74,7 @@ public class Robot extends IterativeRobot {
 	
 	 @Override
 	 public void autonomousPeriodic() {
+		 
 		 while (isAutonomous() && isEnabled()){
 			 double angle = gyro.getAngle();
 			 double Kp = 0.03;
@@ -139,40 +144,47 @@ public class Robot extends IterativeRobot {
 		 System.out.println(gyro.getAngle());
 	
 		 int pov = stick.getPOV();
+		 int povTurn = gamepad.getPOV();
 		 boolean button = gamepad.getRawButton(1);
 		 float slow = 0.5f;
+		 float turn = 0, forward = 0;
 		 if (gamepad.getRawButton(2)) {
 			 
 		 }
-		 if (pov != -1) {
+		 
+		 /*if (gamepad.getRawButton(4)) {
+			 color = !color;
+		 }*/
+		 RedBlue.set(color);
+		 
+		 if (pov != -1 || povTurn != -1) {
 			 switch (pov) {
 			 case 0:
-				 robotDrive.arcadeDrive(-slow, 0);
-				 break;
+			 case 315:
 			 case 45:
-				 robotDrive.arcadeDrive(-slow, -slow);
-				 break;
-			 case 90:
-				 robotDrive.arcadeDrive(0, -slow);
-				 break;
-			 case 135:
-				 robotDrive.arcadeDrive(slow, 0);
+				 forward = -slow;
 				 break;
 			 case 180:
-				 robotDrive.arcadeDrive(slow, 0);
-				 break;
+			 case 135:
 			 case 225:
-				 robotDrive.arcadeDrive(slow, slow);
+				 forward = slow;
+				 break;
+			 } 
+			 switch (povTurn) {
+			 case 90:
+			 case 45:
+			 case 135:	 
+				 turn = -slow;
 				 break;
 			 case 270:
-				 robotDrive.arcadeDrive(0, slow);
-				 break;
+			 case 225:
 			 case 315:
-				 robotDrive.arcadeDrive(slow, slow);
+				 turn = slow;
 				 break;
-			 }                                           
+			 }
+			 robotDrive.arcadeDrive(forward, turn);
 		 }
-
+		 
 
 		 else {
 			 robotDrive.arcadeDrive((stick.getRawAxis(1)), -(gamepad.getRawAxis(0)), true);
@@ -195,11 +207,19 @@ public class Robot extends IterativeRobot {
 			 climbFront.set(0);
 			 climbBack.set(0);
 		 }
+		 timer.reset();
 		 if (gamepad.getRawButton(2)==true){ //GEAR
-			 gear.set(0.4);
+			 if(timer.get() < 5){
+				gear.set(0.4); 
+				timer.reset();
+			 }
 		 }
 		 else {
-			 gear.set(-0.4);
+			 if(timer.get() < 5){
+				gear.set(-0.4); 
+				timer.reset();
+			 }
+
 		 }
 		 if(gamepad.getRawButton(3)==true){ //FUEL INTAKE
 			 intake.set(1);
