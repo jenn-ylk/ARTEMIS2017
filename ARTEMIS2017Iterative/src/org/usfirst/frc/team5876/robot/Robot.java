@@ -178,14 +178,26 @@ public class Robot extends IterativeRobot {
 		 else {
 			 robotDrive.arcadeDrive((stick.getRawAxis(1)), -(gamepad.getRawAxis(0)), true);
 		 }
-
+		 timer.reset();
 		 if(button==true){ //SHOOT
+			 
 			 shoot.set((gamepad.getRawAxis(3)+1)/2);
+			 
+			 if (timer.get()>= 2){
+				 agitator.set(0.4);
+				 }
 		 }
-		 else if(button==false){
+		 else if(button==false && timer.get() >= 2){
 			 shoot.set(0);
 		 }
-
+		 
+		 if(gamepad.getRawButton(3)==true){ //FUEL INTAKE
+			 intake.set(1);
+		 }
+		 else {
+			 intake.set(0);
+			 agitator.set(0);
+		 }
 		
 		 if (stick.getRawButton(1) == true){ //CLIMB
 			 climbFront.set((stick.getRawAxis(3)+1)/2);
@@ -198,26 +210,18 @@ public class Robot extends IterativeRobot {
 		 }
 		 timer.reset();
 		 if (gamepad.getRawButton(2)==true){ //GEAR
-			 if(timer.get() < 5){
+			 if(timer.get() < 2){
 				gear.set(0.4); 
 				timer.reset();
 			 }
 		 }
 		 else {
-			 if(timer.get() < 5){
+			 if(timer.get() < 2){
 				gear.set(-0.4); 
 				timer.reset();
 			 }
 
-		 }
-		 if(gamepad.getRawButton(3)==true){ //FUEL INTAKE
-			 intake.set(1);
-			 agitator.set(1);
-		 }
-		 else {
-			 intake.set(0);
-			 agitator.set(0);
-		 }
+		 } 
 		  
 	 }
 
