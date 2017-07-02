@@ -4,6 +4,7 @@ import edu.wpi.first.wpilibj.ADXRS450_Gyro;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
+import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.VictorSP;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -48,9 +49,8 @@ public class Robot extends IterativeRobot {
 		 climbFront = new VictorSP(4);
 		 climbBack = new VictorSP(5);
 		 shoot = new VictorSP(7);
-		 gear = new VictorSP(8);
-		 intake = new VictorSP(9);
-		 agitator = new VictorSP(10);
+		 gear = new Spark(9); //changgeeee meeeeeeeeee
+		 agitator = new VictorSP(8);
 
 		 timer = new Timer();
 		 gyro = new ADXRS450_Gyro();
@@ -192,14 +192,15 @@ public class Robot extends IterativeRobot {
 		 }
 		 
 		 if(gamepad.getRawButton(3)==true){ //FUEL INTAKE
-			 intake.set(1);
+			 climbFront.set(1);
+			 climbBack.set(1);
 		 }
-		 else {
-			 intake.set(0);
-			 agitator.set(0);
+		 else if(gamepad.getRawButton(3)==false) {
+			 climbBack.set(0);
+			 climbFront.set(0);
 		 }
 		
-		 if (stick.getRawButton(1) == true){ //CLIMB
+		 else if (stick.getRawButton(1) == true){ //CLIMB
 			 climbFront.set((stick.getRawAxis(3)+1)/2);
 
 			 climbBack.set((stick.getRawAxis(3)+1)/2);
@@ -208,20 +209,14 @@ public class Robot extends IterativeRobot {
 			 climbFront.set(0);
 			 climbBack.set(0);
 		 }
-		 timer.reset();
-		 if (gamepad.getRawButton(2)==true){ //GEAR
-			 if(timer.get() < 2){
+		 
+		 if (gamepad.getRawButton(2)==true){ //GEAR 
 				gear.set(0.4); 
-				timer.reset();
-			 }
+			 
 		 }
 		 else {
-			 if(timer.get() < 2){
 				gear.set(-0.4); 
-				timer.reset();
-			 }
-
-		 } 
+			 } 
 		  
 	 }
 
