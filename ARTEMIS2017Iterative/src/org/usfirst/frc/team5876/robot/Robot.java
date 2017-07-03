@@ -110,12 +110,12 @@ public class Robot extends IterativeRobot {
 					double Kp = 0.05;
 					robotDrive.arcadeDrive(-0.5, (angle +60) * Kp);//change back to negative
 					Timer.delay(0.01);
-					if (timer.get() <= 8.5){
+					/*if (timer.get() <= 8.5){
 					gear.set(0.4);
 					}
 					else if(timer.get()<= 10.5){
 					gear.set(-0.4);
-				}
+				} */
 				}
 				else {
 					robotDrive.arcadeDrive(0, 0);
@@ -163,12 +163,12 @@ public class Robot extends IterativeRobot {
 					double Kp = 0.05;
 					robotDrive.arcadeDrive(-0.5, (angle -60) * Kp);//change back to negative
 					Timer.delay(0.01);
-					if (timer.get() >= 8.5){
+					/*if (timer.get() >= 8.5){
 						gear.set(0.4);
 						}
 						else if(timer.get()>= 10.5){
 						gear.set(-0.4);
-					}
+					} */
 				}
 				else {
 					robotDrive.arcadeDrive(0, 0);
@@ -198,12 +198,12 @@ public class Robot extends IterativeRobot {
 					
 					Timer.delay(0.01);
 					
-					if (timer.get() >= 4.2){
+				/*	if (timer.get() >= 4.2){
 						gear.set(0.4);
 						}
 						else if(timer.get()<= 6.2){
 						gear.set(-0.4);
-					}
+					}*/
 					
 				}
 				break;
@@ -290,14 +290,14 @@ public class Robot extends IterativeRobot {
 			 climbBack.set(0);
 		 }
 		 
-		 if (gamepad.getRawButton(2)==true){ //GEAR 
+		/* if (gamepad.getRawButton(2)==true){ //GEAR 
 				gear.set(0.4); 
 			 
 		 }
 		 else {
 				gear.set(-0.4); 
 			 } 
-		  
+		  */
 	 }
 
 	 @Override
