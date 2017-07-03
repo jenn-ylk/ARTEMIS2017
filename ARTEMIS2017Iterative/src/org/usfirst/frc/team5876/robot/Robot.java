@@ -69,71 +69,150 @@ public class Robot extends IterativeRobot {
 
 	
 	 @Override
-	 public void autonomousPeriodic() {
-		 while (isAutonomous() && isEnabled()){
-			 double angle = gyro.getAngle();
-			 double Kp = 0.03;
-			 robotDrive.arcadeDrive(-1.0, -angle * Kp);
-			 Timer.delay(0.01);
-		 }
-		 switch (autoSelected) {
-		 case 1:
-			 // Put custom auto code here
-			 System.out.println(gyro.getAngle());
-			 System.out.println("Auto 1");
+		public void autonomousPeriodic() {
+			
+			switch (autoSelected) {
+			case 1: //SHOULD TURN LEFT FOR THE GEAR HOOK ON THE RIGHT
+				System.out.println(gyro.getAngle());
+				System.out.println("Auto 1");
+				
+				if (timer.get() < 1.5){ //.5 seconds less of slow advance
+					double angle = gyro.getAngle();
+					double Kp = 0.05;
+					robotDrive.arcadeDrive(-0.4, angle * Kp);//change back to negative
+					Timer.delay(0.01);
+				}
+				else if (timer.get() < 4.7) { // 
+					
+					double angle = gyro.getAngle();
+					double Kp = 0.05;
+					robotDrive.arcadeDrive(-0.5, angle * Kp);//change back to negative
+					Timer.delay(0.01);
+					 
+					
+					
+				}
 
+				else if (timer.get() < 6.5) {
+					
+					if (gyro.getAngle() < -59.8) {
+						robotDrive.arcadeDrive(0, -0.5);
+					}
+					else if (gyro.getAngle() > -60.2) {
+						robotDrive.arcadeDrive(0, 0.5);
+					}
+					else {
+						robotDrive.arcadeDrive(0, 0);
+					}
+				}
+				else if (timer.get() < 9.5) {
+					double angle = gyro.getAngle();
+					double Kp = 0.05;
+					robotDrive.arcadeDrive(-0.5, (angle +60) * Kp);//change back to negative
+					Timer.delay(0.01);
+					if (timer.get() <= 8.5){
+					gear.set(0.4);
+					}
+					else if(timer.get()<= 10.5){
+					gear.set(-0.4);
+				}
+				}
+				else {
+					robotDrive.arcadeDrive(0, 0);
+				}
+			
+				break;
+			case 2: // Should go for the left gear - turn right
+				
+				System.out.println(gyro.getAngle());
+				System.out.println("Auto 2");
 
-			 if (timer.get() < 2.5) {
-				 robotDrive.arcadeDrive(-0.5, 0);
-			 } else if (timer.get() < 4.0) {
-				 if (gyro.getAngle() > -44) {
-					 System.out.println("need to turn left");
-					 robotDrive.arcadeDrive(0.1, 0.5); // turn left
-				 } else if (gyro.getAngle() < -46) {
-					 System.out.println("need to turn right");
-					 robotDrive.arcadeDrive(0.1, -0.5); // turn right
-				 } else {
-					 robotDrive.arcadeDrive(0.5, 0);
-				 }
-			 } else {
-				 robotDrive.arcadeDrive(0, 0);
-			 }
-			 break;
-		 case 2:
-			 // Put custom auto code here
-			 System.out.println(gyro.getAngle());
-			 System.out.println("Auto 2");
+				if (timer.get() < 1.5){
+					double angle = gyro.getAngle();
+					double Kp = 0.05;
+					robotDrive.arcadeDrive(-0.4, angle * Kp);//change back to negative
+					Timer.delay(0.01);
+				}
+				else if (timer.get() < 4.7) {
+					
+					double angle = gyro.getAngle();
+					double Kp = 0.05;
+					robotDrive.arcadeDrive(-0.5, angle * Kp);//change back to negative
+					//robotDrive.arcadeDrive(-0.35, () * Kp);
+					Timer.delay(0.01);
+					
+				}
 
-			 if (timer.get() < 2.5) {
-				 robotDrive.arcadeDrive(-0.5, 0);
-			 } else if (timer.get() < 4.0) {
-				 if (gyro.getAngle() < 44) {
-					 System.out.println("need to turn right");
-					 robotDrive.arcadeDrive(0.1, 0.5); // turn right
-				 } else if (gyro.getAngle() > 46) {
-					 System.out.println("need to turn left");
-					 robotDrive.arcadeDrive(0.1, -0.5); // turn left
-				 } else {
-					 robotDrive.arcadeDrive(0.5, 0);
-				 }
-			 } else {
-				 robotDrive.arcadeDrive(0, 0);
-			 }
-			 break;
-		 case 0:
-		 default:
-			 // Put default auto code here
-			 System.out.println(gyro.getAngle());
-			 System.out.println("Auto 0");
+				else if (timer.get() < 6.5) {
+					
+					if (gyro.getAngle() < 60.2) {
+						robotDrive.arcadeDrive(0, -0.5);
+					}
+					else if (gyro.getAngle() > 59.8) {
+						robotDrive.arcadeDrive(0, 0.5);
+					}
+					else {
+						robotDrive.arcadeDrive(0, 0);
+					}
+					
+					
+				}
+				
+				else if (timer.get() < 9.5) {
+					double angle = gyro.getAngle();
+					double Kp = 0.05;
+					robotDrive.arcadeDrive(-0.5, (angle -60) * Kp);//change back to negative
+					Timer.delay(0.01);
+					if (timer.get() >= 8.5){
+						gear.set(0.4);
+						}
+						else if(timer.get()>= 10.5){
+						gear.set(-0.4);
+					}
+				}
+				else {
+					robotDrive.arcadeDrive(0, 0);
+				}
+				break;
+				
+			case 0: //GOES STRAIGHT FORWARD. WORKS!!!
+			default:
+				
+				System.out.println(gyro.getAngle());
+				System.out.println("Auto 0");
+				
+				
+				
+				if (timer.get() < 1.5){
+					double angle = gyro.getAngle();
+					double Kp = 0.05;
+					robotDrive.arcadeDrive(-0.35, angle * Kp);
+					Timer.delay(0.01);
+				}
 
-			 if (timer.get() < 2.5) {
-				 robotDrive.arcadeDrive(-0.5, 0);
-			 }
-			 break;
-		 }
-	 }
-
-	
+				else if (timer.get() < 5.2) {
+					
+					double angle = gyro.getAngle();
+					double Kp = 0.05;
+					robotDrive.arcadeDrive(-0.5, angle * Kp);
+					
+					Timer.delay(0.01);
+					
+					if (timer.get() >= 4.2){
+						gear.set(0.4);
+						}
+						else if(timer.get()<= 6.2){
+						gear.set(-0.4);
+					}
+					
+				}
+				break;
+			}
+		}
+	 
+	 
+	 
+	 
 	 @Override
 	 public void teleopPeriodic() {
 		 System.out.println(gyro.getAngle());
@@ -189,6 +268,7 @@ public class Robot extends IterativeRobot {
 		 }
 		 else if(button==false && timer.get() >= 2){
 			 shoot.set(0);
+			 agitator.set(0);
 		 }
 		 
 		 if(gamepad.getRawButton(3)==true){ //FUEL INTAKE
