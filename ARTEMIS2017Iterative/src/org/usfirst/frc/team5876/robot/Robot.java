@@ -257,16 +257,17 @@ public class Robot extends IterativeRobot {
 		 else {
 			 robotDrive.arcadeDrive((stick.getRawAxis(1)), -(gamepad.getRawAxis(0)), true);
 		 }
+		 timer.start();
 		 timer.reset();
 		 if(button==true){ //SHOOT
 			 
-			 shoot.set((gamepad.getRawAxis(3)+1)/2);
-			 
-			 if (timer.get()>= 2){
-				 agitator.set(0.4);
-				 }
+			 shoot.set(-(gamepad.getRawAxis(3)+1)/2);
+			 agitator.set(-0.3);
+			 /*if (timer.get()>= 2){
+				 
+				 }*/
 		 }
-		 else if(button==false && timer.get() >= 2){
+		 else if(button==false /*&& timer.get() >= 2*/){
 			 shoot.set(0);
 			 agitator.set(0);
 		 }
