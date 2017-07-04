@@ -82,7 +82,7 @@ public class Robot extends IterativeRobot {
 					robotDrive.arcadeDrive(-0.4, angle * Kp);//change back to negative
 					Timer.delay(0.01);
 				}
-				else if (timer.get() < 4.7) { // 
+				else if (timer.get() < 4.2) { // 
 					
 					double angle = gyro.getAngle();
 					double Kp = 0.05;
@@ -133,7 +133,7 @@ public class Robot extends IterativeRobot {
 					robotDrive.arcadeDrive(-0.4, angle * Kp);//change back to negative
 					Timer.delay(0.01);
 				}
-				else if (timer.get() < 4.7) {
+				else if (timer.get() < 4.2) {
 					
 					double angle = gyro.getAngle();
 					double Kp = 0.05;
@@ -260,31 +260,27 @@ public class Robot extends IterativeRobot {
 		 timer.start();
 		 timer.reset();
 		 if(button==true){ //SHOOT
-			 
-			 shoot.set(-(gamepad.getRawAxis(3)+1)/2);
-			 agitator.set(-0.3);
-			 /*if (timer.get()>= 2){
-				 
-				 }*/
+			 shoot.set(-(gamepad.getRawAxis(3)+1));
+			 agitator.set(0.3);
+			
 		 }
-		 else if(button==false /*&& timer.get() >= 2*/){
+		 else if(button==false){
 			 shoot.set(0);
 			 agitator.set(0);
 		 }
 		 
-		 if(gamepad.getRawButton(3)==true){ //FUEL INTAKE
+		/* if(gamepad.getRawButton(3)==true){ //FUEL INTAKE
 			 climbFront.set(1);
 			 climbBack.set(1);
 		 }
 		 else if(gamepad.getRawButton(3)==false) {
 			 climbBack.set(0);
 			 climbFront.set(0);
-		 }
+		 } */
 		
-		 else if (stick.getRawButton(1) == true){ //CLIMB
-			 climbFront.set((stick.getRawAxis(3)+1)/2);
-
-			 climbBack.set((stick.getRawAxis(3)+1)/2);
+		 if (stick.getRawButton(1) == true){ //CLIMB
+			 climbFront.set((stick.getRawAxis(3)+1));
+			 climbBack.set((stick.getRawAxis(3)+1));
 		 }
 		 else {
 			 climbFront.set(0);
