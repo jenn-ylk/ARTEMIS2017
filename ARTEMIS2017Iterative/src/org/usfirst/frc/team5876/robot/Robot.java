@@ -16,6 +16,7 @@ public class Robot extends IterativeRobot {
 	final Integer middleAuto = new Integer(0);
 	final Integer rightAuto = new Integer(1);
 	final Integer leftAuto = new Integer(2);
+	final Integer driveAuto = new Integer(3);
 	Integer autoSelected;
 
 	RobotDrive robotDrive;
@@ -37,6 +38,7 @@ public class Robot extends IterativeRobot {
 		 chooser.addDefault("Middle Gear", middleAuto);
 		 chooser.addObject("Right Gear", rightAuto);
 		 chooser.addObject("Left Gear", leftAuto);
+		 chooser.addObject("Drive Over Line", driveAuto);
 		 SmartDashboard.putData("Auto choices", chooser);
 		 
 		 
@@ -175,6 +177,20 @@ public class Robot extends IterativeRobot {
 				}
 				break;
 				
+			case 3: //just drives over line
+				System.out.println(gyro.getAngle());
+				System.out.println("Auto 3");
+				
+				if (timer.get() < 6.2) {
+					double angle = gyro.getAngle();
+					double Kp = 0.05;
+					robotDrive.arcadeDrive(-0.5, angle * Kp);
+					
+					Timer.delay(0.01);
+				}
+				else {
+					robotDrive.arcadeDrive(0,0);
+				}
 			case 0: //GOES STRAIGHT FORWARD. WORKS!!!
 			default:
 				
@@ -222,10 +238,14 @@ public class Robot extends IterativeRobot {
 		 boolean button = gamepad.getRawButton(1);
 		 float slow = 0.5f;
 		 float turn = 0, forward = 0;
-		 if (gamepad.getRawButton(2)) {
-			 
+		 if (gamepad.getRawButton(5)== true) {
+			 robotDrive.arcadeDrive(0,0.4);
 		 }
-		 if (pov != -1 || povTurn != -1) {
+		 else if (gamepad.getRawButton(6)== true) {
+			 robotDrive.arcadeDrive(0,-0.4);
+		 }
+		 
+		 else if (pov != -1 || povTurn != -1) {
 			 switch (pov) {
 			 case 0:
 			 case 315:
