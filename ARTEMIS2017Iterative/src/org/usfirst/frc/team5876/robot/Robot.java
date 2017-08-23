@@ -1,6 +1,8 @@
 package org.usfirst.frc.team5876.robot;
 
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
+import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
@@ -28,6 +30,7 @@ public class Robot extends IterativeRobot {
 	SpeedController gear;
 	SpeedController intake;
 	SpeedController agitator;
+	//SpeedController spin;
 	SendableChooser<Integer> chooser = new SendableChooser<Integer>();
 	ADXRS450_Gyro gyro;
 	Timer timer;
@@ -53,6 +56,16 @@ public class Robot extends IterativeRobot {
 		 shoot = new VictorSP(7);
 		 gear = new Spark(9); //changgeeee meeeeeeeeee
 		 agitator = new VictorSP(8);
+		 //spin = new VictorSP(6);
+		 Compressor c = new Compressor(0);
+
+		 c.setClosedLoopControl(true);
+		 c.setClosedLoopControl(false);
+		 DoubleSolenoid exampleDouble = new DoubleSolenoid(1, 2);
+
+		 exampleDouble.set(DoubleSolenoid.Value.kOff);
+		 exampleDouble.set(DoubleSolenoid.Value.kForward);
+		 exampleDouble.set(DoubleSolenoid.Value.kReverse);
 
 		 timer = new Timer();
 		 gyro = new ADXRS450_Gyro();
@@ -315,6 +328,13 @@ public class Robot extends IterativeRobot {
 				gear.set(-0.4); 
 			 } 
 		  */
+		 
+		 /*if (stick.getRawButton(x) == true {
+		 	spin.set(1);
+		 	}
+		 else{
+		 	spin.set(0);
+		 	}*/
 	 }
 
 	 @Override
