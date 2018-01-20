@@ -1,8 +1,11 @@
 package org.usfirst.frc.team5876.robot;
 
 import edu.wpi.first.wpilibj.ADXRS450_Gyro;
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.RobotDrive;
@@ -30,9 +33,14 @@ public class Robot extends IterativeRobot {
 	SpeedController gear;
 	SpeedController intake;
 	SpeedController agitator;
+	Encoder enc;
+	Compressor compressor;
+	DoubleSolenoid exampleDouble;
 	//SpeedController spin;
 	SendableChooser<Integer> chooser = new SendableChooser<Integer>();
 	ADXRS450_Gyro gyro;
+	AnalogInput lightSensor;
+	DigitalInput uswitch;
 	Timer timer;
 
 	
@@ -57,19 +65,22 @@ public class Robot extends IterativeRobot {
 		 gear = new Spark(9); //changgeeee meeeeeeeeee
 		 agitator = new VictorSP(8);
 		 //spin = new VictorSP(6);
-		 Compressor c = new Compressor(0);
+		 compressor = new Compressor(0);
 
-		 c.setClosedLoopControl(true);
-		 c.setClosedLoopControl(false);
-		 DoubleSolenoid exampleDouble = new DoubleSolenoid(1, 2);
+		 compressor.setClosedLoopControl(true);
+		 compressor.setClosedLoopControl(false);
+		 exampleDouble = new DoubleSolenoid(2, 3);
 
 		 exampleDouble.set(DoubleSolenoid.Value.kOff);
-		 exampleDouble.set(DoubleSolenoid.Value.kForward);
-		 exampleDouble.set(DoubleSolenoid.Value.kReverse);
-
+//		 exampleDouble.set(DoubleSolenoid.Value.kForward);
+//		 exampleDouble.set(DoubleSolenoid.Value.kReverse);
+		 enc = new Encoder(9,8);
+		 
 		 timer = new Timer();
 		 gyro = new ADXRS450_Gyro();
 		 gyro.calibrate();
+		 uswitch= new DigitalInput(1);
+		 lightSensor = new AnalogInput(3);
 		 robotDrive = new RobotDrive(driveLeftFront, driveLeftBack, driveRightFront, driveRightBack);
 	 }
 
@@ -244,13 +255,19 @@ public class Robot extends IterativeRobot {
 	 
 	 @Override
 	 public void teleopPeriodic() {
-		 System.out.println(gyro.getAngle());
-	
+//		 System.out.println(gyro.getAngle());
+		 System.out.println(uswitch.get());
+		 compressor.start();
 		 int pov = stick.getPOV();
 		 int povTurn = gamepad.getPOV();
 		 boolean button = gamepad.getRawButton(1);
 		 float slow = 0.5f;
 		 float turn = 0, forward = 0;
+		 if (gamepad.getRawButton(2) == true) {
+			 exampleDouble.set(DoubleSolenoid.Value.kForward);
+		 } else {
+			 exampleDouble.set(DoubleSolenoid.Value.kReverse);
+		 }
 		 if (gamepad.getRawButton(5)== true) {
 			 robotDrive.arcadeDrive(0,0.4);
 		 }
